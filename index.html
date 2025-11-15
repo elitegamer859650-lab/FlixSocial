@@ -28,9 +28,12 @@
                 <nav class="flex space-x-6">
                     <a href="index.html" class="font-medium border-b-2 border-yellow-300">Home</a>
                     <a href="videos.html" class="font-medium hover:text-yellow-300 transition">Videos</a>
+                    <a href="video-upload.html" class="font-medium hover:text-yellow-300 transition">Upload</a>
                     <a href="profile.html" class="font-medium hover:text-yellow-300 transition">Profile</a>
-                    <a href="messages.html" class="font-medium hover:text-yellow-300 transition">Messages</a>
+                    <a href="friends.html" class="font-medium hover:text-yellow-300 transition">Friends</a>
+                    <a href="groups.html" class="font-medium hover:text-yellow-300 transition">Groups</a>
                     <a href="notifications.html" class="font-medium hover:text-yellow-300 transition">Notifications</a>
+                    <a href="analytics.html" class="font-medium hover:text-yellow-300 transition">Analytics</a>
                     <a href="admin.html" class="font-medium hover:text-red-300 transition">Admin</a>
                 </nav>
                 <div class="flex items-center space-x-4">
@@ -46,6 +49,30 @@
         </div>
     </header>
 
+    <!-- Auth Modal -->
+    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+        <div class="bg-white rounded-xl p-6 w-96">
+            <h2 class="text-2xl font-bold mb-4">Welcome to FlixSocial</h2>
+            <div class="space-y-4">
+                <input type="email" id="loginEmail" placeholder="Email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="password" id="loginPassword" placeholder="Password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="loginBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md">Sign In</button>
+                <button id="showSignup" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 rounded-md">Create Account</button>
+                <p class="text-center text-sm text-gray-600">Or continue as <a href="index.html" class="text-blue-500">Guest</a></p>
+            </div>
+            
+            <!-- Signup Form -->
+            <div id="signupForm" class="hidden mt-4">
+                <input type="text" id="signupName" placeholder="Full Name" class="w-full px-3 py-2 border border-gray-300 rounded-md mb-3">
+                <input type="email" id="signupEmail" placeholder="Email" class="w-full px-3 py-2 border border-gray-300 rounded-md mb-3">
+                <input type="password" id="signupPassword" placeholder="Password" class="w-full px-3 py-2 border border-gray-300 rounded-md mb-3">
+                <button id="signupBtn" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md">Sign Up</button>
+            </div>
+            
+            <p id="authError" class="text-red-500 text-sm mt-3 text-center hidden"></p>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <main class="container mx-auto p-4 mt-4">
         <div class="flex gap-6">
@@ -53,10 +80,10 @@
             <div class="w-1/4 hidden lg:block">
                 <div class="bg-white rounded-xl shadow-lg p-4 mb-6">
                     <div class="flex items-center space-x-3 mb-4">
-                        <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">JS</div>
+                        <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">G</div>
                         <div>
-                            <h3 class="font-bold">John Smith</h3>
-                            <p class="text-gray-500 text-sm">@johnsmith</p>
+                            <h3 class="font-bold">Guest User</h3>
+                            <p class="text-gray-500 text-sm">Sign in to access features</p>
                         </div>
                     </div>
                     <div class="space-y-1">
@@ -72,20 +99,45 @@
                         <a href="groups.html" class="sidebar-item flex items-center p-2 rounded-lg text-gray-700">
                             <i class="fas fa-user-friends mr-3"></i> Groups
                         </a>
-                        <a href="events.html" class="sidebar-item flex items-center p-2 rounded-lg text-gray-700">
-                            <i class="fas fa-calendar mr-3"></i> Events
+                        <a href="analytics.html" class="sidebar-item flex items-center p-2 rounded-lg text-gray-700">
+                            <i class="fas fa-chart-bar mr-3"></i> Analytics
                         </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <h3 class="font-bold text-lg mb-4">Platform Stats</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Total Users</span>
+                            <span class="font-bold" id="statsUsers">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Total Videos</span>
+                            <span class="font-bold" id="statsVideos">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Online Now</span>
+                            <span class="font-bold" id="statsOnline">0</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Main Feed -->
             <div class="lg:w-2/4 w-full">
+                <!-- Welcome Banner -->
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg p-6 text-white mb-6">
+                    <h2 class="text-2xl font-bold mb-2">Welcome to FlixSocial! 🎬</h2>
+                    <p class="opacity-90">Share your videos, connect with friends, and discover amazing content</p>
+                </div>
+
                 <!-- Create Post -->
                 <div class="bg-white rounded-xl shadow-lg p-4 mb-6 post-card">
                     <div class="flex items-center space-x-3 mb-4">
-                        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">JS</div>
-                        <input type="text" placeholder="What's on your mind, John?" class="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">G</div>
+                        <input type="text" placeholder="What's on your mind?" class="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div class="flex justify-between border-t pt-4">
                         <button class="flex items-center text-gray-600 hover:text-blue-500 transition">
@@ -101,49 +153,11 @@
                 </div>
 
                 <!-- Feed Posts -->
-                <div class="space-y-6">
-                    <!-- Post 1 -->
-                    <div class="bg-white rounded-xl shadow-lg p-6 post-card">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold">MS</div>
-                                <div>
-                                    <h3 class="font-bold">Maria Sanchez</h3>
-                                    <p class="text-gray-500 text-sm">2 hours ago · <i class="fas fa-globe-americas"></i></p>
-                                </div>
-                            </div>
-                            <button class="text-gray-400 hover:text-gray-600">
-                                <i class="fas fa-ellipsis-h"></i>
-                            </button>
-                        </div>
-                        
-                        <p class="mb-4">Just finished this amazing documentary about space exploration! The visuals are absolutely breathtaking. 🚀✨</p>
-                        
-                        <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                            <div class="flex space-x-4">
-                                <img src="https://placehold.co/100x80/667eea/ffffff?text=Space" alt="Space documentary" class="rounded-md w-24 h-20 object-cover">
-                                <div>
-                                    <h4 class="font-bold">The Final Frontier: Space Exploration</h4>
-                                    <p class="text-sm text-gray-600 mt-1">A journey through our universe and beyond</p>
-                                    <p class="text-xs text-gray-500 mt-2">documentary.com</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between text-gray-500 border-t pt-4">
-                            <button class="flex items-center space-x-1 hover:text-blue-500">
-                                <i class="far fa-thumbs-up"></i>
-                                <span>245</span>
-                            </button>
-                            <button class="flex items-center space-x-1 hover:text-blue-500">
-                                <i class="far fa-comment"></i>
-                                <span>42</span>
-                            </button>
-                            <button class="flex items-center space-x-1 hover:text-blue-500">
-                                <i class="far fa-share-square"></i>
-                                <span>Share</span>
-                            </button>
-                        </div>
+                <div class="space-y-6" id="feedPosts">
+                    <!-- Posts will be loaded here -->
+                    <div class="text-center py-10">
+                        <i class="fas fa-spinner fa-spin text-3xl text-blue-500 mb-4"></i>
+                        <p class="text-gray-600">Loading feed...</p>
                     </div>
                 </div>
             </div>
@@ -153,13 +167,30 @@
                 <!-- Trending Now -->
                 <div class="bg-white rounded-xl shadow-lg p-4 mb-6">
                     <h3 class="font-bold text-lg mb-4">Trending Now</h3>
-                    <div class="space-y-3">
+                    <div class="space-y-3" id="trendingList">
                         <div class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
                             <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
                             <div>
-                                <h4 class="font-semibold">Tech Conference 2023</h4>
-                                <p class="text-xs text-gray-500">15K posts</p>
+                                <h4 class="font-semibold">#TechTrends</h4>
+                                <p class="text-xs text-gray-500">2.5K posts</p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Suggested Friends -->
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <h3 class="font-bold text-lg mb-4">Suggested Friends</h3>
+                    <div class="space-y-3" id="suggestedFriends">
+                        <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-sm">JD</div>
+                                <div>
+                                    <h4 class="font-semibold">John Doe</h4>
+                                    <p class="text-xs text-gray-500">45 mutual friends</p>
+                                </div>
+                            </div>
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">Add</button>
                         </div>
                     </div>
                 </div>
@@ -167,38 +198,91 @@
         </div>
     </main>
 
-    <!-- Auth Modal -->
-    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
-        <div class="bg-white rounded-xl p-6 w-96">
-            <h2 class="text-2xl font-bold mb-4">Welcome to FlixSocial</h2>
-            <div class="space-y-4">
-                <input type="email" placeholder="Email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <input type="password" placeholder="Password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <button class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md">Sign In</button>
-                <p class="text-center text-sm text-gray-600">Don't have an account? <a href="#" class="text-blue-500">Sign up</a></p>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Firebase Configuration
+        // Firebase Configuration for Admin Panel
         const firebaseConfig = {
-            apiKey: "AIzaSyA8CjkoY0ygW4lhpTn_-BKOI9DjHqqFXBs",
-            authDomain: "heroflix-d64ac.firebaseapp.com",
-            databaseURL: "https://heroflix-d64ac-default-rtdb.firebaseio.com",
-            projectId: "heroflix-d64ac",
-            storageBucket: "heroflix-d64ac.firebasestorage.app",
-            messagingSenderId: "451233952566",
-            appId: "1:451233952566:web:1ecd9f7066d5e7cab77997"
+            apiKey: "AIzaSyBFLVfCrvZ9XZMkTB3MtRY47V8BpB_vngA",
+            authDomain: "flixsocial-admin-panel.firebaseapp.com",
+            databaseURL: "https://flixsocial-admin-panel-default-rtdb.firebaseio.com",
+            projectId: "flixsocial-admin-panel",
+            storageBucket: "flixsocial-admin-panel.firebasestorage.app",
+            messagingSenderId: "425534640340",
+            appId: "1:425534640340:web:deecf577df980c13c32b41"
         };
 
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        
-        const authBtn = document.getElementById('authBtn');
-        const authModal = document.getElementById('authModal');
+        const auth = firebase.auth();
+        const database = firebase.database();
 
+        // DOM Elements
+        const authModal = document.getElementById('authModal');
+        const authBtn = document.getElementById('authBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const showSignup = document.getElementById('showSignup');
+        const authError = document.getElementById('authError');
+        const signupForm = document.getElementById('signupForm');
+
+        // Authentication State
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                authBtn.textContent = 'My Account';
+                loadUserData(user);
+            } else {
+                authBtn.textContent = 'Sign In';
+                loadGuestData();
+            }
+        });
+
+        // Auth Modal Handlers
         authBtn.addEventListener('click', () => {
             authModal.classList.toggle('hidden');
+        });
+
+        showSignup.addEventListener('click', () => {
+            signupForm.classList.toggle('hidden');
+        });
+
+        loginBtn.addEventListener('click', async () => {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                authModal.classList.add('hidden');
+            } catch (error) {
+                authError.textContent = error.message;
+                authError.classList.remove('hidden');
+            }
+        });
+
+        signupBtn.addEventListener('click', async () => {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                await userCredential.user.updateProfile({ displayName: name });
+                
+                // Save user to database
+                await database.ref('users/' + userCredential.user.uid).set({
+                    name: name,
+                    email: email,
+                    createdAt: Date.now(),
+                    profile: {
+                        bio: '',
+                        location: '',
+                        website: ''
+                    }
+                });
+                
+                authModal.classList.add('hidden');
+            } catch (error) {
+                authError.textContent = error.message;
+                authError.classList.remove('hidden');
+            }
         });
 
         // Close modal when clicking outside
@@ -208,16 +292,102 @@
             }
         });
 
-        // Page routing simulation
-        document.addEventListener('click', (e) => {
-            if (e.target.tagName === 'A' && e.target.href) {
-                e.preventDefault();
-                const url = new URL(e.target.href);
-                if (url.pathname.endsWith('.html')) {
-                    // Simulate page navigation
-                    window.location.href = url.pathname + url.search;
+        // Load platform stats
+        function loadPlatformStats() {
+            database.ref('users').on('value', (snapshot) => {
+                const users = snapshot.val();
+                document.getElementById('statsUsers').textContent = users ? Object.keys(users).length : 0;
+            });
+
+            database.ref('videos').on('value', (snapshot) => {
+                const videos = snapshot.val();
+                document.getElementById('statsVideos').textContent = videos ? Object.keys(videos).length : 0;
+            });
+
+            // Simulate online users
+            document.getElementById('statsOnline').textContent = Math.floor(Math.random() * 100) + 50;
+        }
+
+        // Load user data
+        function loadUserData(user) {
+            // Update UI for logged in user
+            document.querySelector('.bg-blue-500').textContent = user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U';
+            document.querySelector('h3.font-bold').textContent = user.displayName || 'User';
+            document.querySelector('.text-gray-500').textContent = '@' + (user.displayName ? user.displayName.toLowerCase().replace(' ', '') : 'user');
+        }
+
+        // Load guest data
+        function loadGuestData() {
+            // Default guest UI
+        }
+
+        // Load feed posts
+        function loadFeedPosts() {
+            database.ref('videos').limitToLast(10).on('value', (snapshot) => {
+                const videos = snapshot.val();
+                const feedPosts = document.getElementById('feedPosts');
+                
+                if (!videos) {
+                    feedPosts.innerHTML = `
+                        <div class="text-center py-10">
+                            <i class="fas fa-video-slash text-3xl text-gray-400 mb-4"></i>
+                            <p class="text-gray-600">No videos yet. Be the first to upload!</p>
+                        </div>
+                    `;
+                    return;
                 }
-            }
+
+                feedPosts.innerHTML = '';
+                Object.entries(videos).forEach(([videoId, video]) => {
+                    const post = document.createElement('div');
+                    post.className = 'bg-white rounded-xl shadow-lg p-6 post-card';
+                    post.innerHTML = `
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                                    ${video.uploadedByName ? video.uploadedByName.charAt(0).toUpperCase() : 'U'}
+                                </div>
+                                <div>
+                                    <h3 class="font-bold">${video.uploadedByName || 'Unknown User'}</h3>
+                                    <p class="text-gray-500 text-sm">${new Date(video.uploadedAt).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mb-4">${video.description || 'Check out my new video!'}</p>
+                        <div class="bg-gray-50 rounded-lg p-4 mb-4 cursor-pointer" onclick="window.location.href='video-player.html?id=${videoId}'">
+                            <div class="flex space-x-4">
+                                <img src="${video.thumbnail || 'https://placehold.co/100x80/667eea/ffffff?text=Video'}" 
+                                     alt="Video thumbnail" class="rounded-md w-24 h-20 object-cover">
+                                <div>
+                                    <h4 class="font-bold">${video.title || 'Untitled Video'}</h4>
+                                    <p class="text-sm text-gray-600 mt-1">${video.views || 0} views • ${video.likes || 0} likes</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-gray-500 border-t pt-4">
+                            <button class="flex items-center space-x-1 hover:text-blue-500">
+                                <i class="far fa-thumbs-up"></i>
+                                <span>${video.likes || 0}</span>
+                            </button>
+                            <button class="flex items-center space-x-1 hover:text-blue-500">
+                                <i class="far fa-comment"></i>
+                                <span>Comment</span>
+                            </button>
+                            <button class="flex items-center space-x-1 hover:text-blue-500">
+                                <i class="far fa-share-square"></i>
+                                <span>Share</span>
+                            </button>
+                        </div>
+                    `;
+                    feedPosts.appendChild(post);
+                });
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPlatformStats();
+            loadFeedPosts();
         });
     </script>
 </body>
