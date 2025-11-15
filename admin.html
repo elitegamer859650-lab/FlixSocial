@@ -14,13 +14,18 @@
         .sidebar-item:hover { background-color: #3B82F6; color: white; }
         .stats-card { transition: all 0.3s ease; }
         .stats-card:hover { transform: translateY(-5px); }
+        .admin-sidebar { background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%); }
     </style>
 </head>
 <body class="bg-gray-100">
     <!-- Admin Login Modal -->
     <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
         <div class="bg-white rounded-xl p-8 w-96">
-            <h2 class="text-2xl font-bold mb-6 text-center">Admin Login</h2>
+            <div class="text-center mb-6">
+                <i class="fas fa-shield-alt text-4xl text-blue-500 mb-3"></i>
+                <h2 class="text-2xl font-bold">Admin Login</h2>
+                <p class="text-gray-600 mt-2">Access the FlixSocial Admin Panel</p>
+            </div>
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
@@ -39,160 +44,183 @@
     </div>
 
     <!-- Admin Panel (Hidden until login) -->
-    <div id="adminPanel" class="hidden">
-        <!-- Header -->
-        <header class="nav-gradient text-white shadow-lg">
-            <div class="container mx-auto">
-                <div class="flex justify-between items-center p-4">
-                    <div class="flex items-center">
-                        <i class="fas fa-cog text-2xl mr-2 text-yellow-300"></i>
-                        <h1 class="text-xl font-bold">FlixSocial Admin Panel</h1>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <span id="adminWelcome" class="font-medium">Welcome, Admin</span>
-                        <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm">
-                            Logout
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="container mx-auto p-4 mt-4">
-            <!-- Stats Overview -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div class="stats-card bg-white rounded-xl shadow-lg p-6 text-center">
-                    <div class="text-3xl font-bold text-blue-500 mb-2" id="totalUsers">0</div>
-                    <div class="text-gray-600">Total Users</div>
-                </div>
-                <div class="stats-card bg-white rounded-xl shadow-lg p-6 text-center">
-                    <div class="text-3xl font-bold text-green-500 mb-2" id="totalVideos">0</div>
-                    <div class="text-gray-600">Total Videos</div>
-                </div>
-                <div class="stats-card bg-white rounded-xl shadow-lg p-6 text-center">
-                    <div class="text-3xl font-bold text-purple-500 mb-2" id="totalViews">0</div>
-                    <div class="text-gray-600">Total Views</div>
-                </div>
-                <div class="stats-card bg-white rounded-xl shadow-lg p-6 text-center">
-                    <div class="text-3xl font-bold text-yellow-500 mb-2" id="totalLikes">0</div>
-                    <div class="text-gray-600">Total Likes</div>
-                </div>
-            </div>
-
-            <!-- Tabs -->
-            <div class="bg-white rounded-xl shadow-lg mb-6">
-                <div class="border-b border-gray-200">
-                    <nav class="flex space-x-8 px-6">
-                        <button id="usersTab" class="py-4 border-b-2 border-blue-500 text-blue-500 font-medium">Users</button>
-                        <button id="videosTab" class="py-4 text-gray-500 hover:text-blue-500 font-medium">Videos</button>
-                        <button id="analyticsTab" class="py-4 text-gray-500 hover:text-blue-500 font-medium">Analytics</button>
-                    </nav>
-                </div>
-            </div>
-
-            <!-- Users Tab -->
-            <div id="usersContent" class="bg-white rounded-xl shadow-lg p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold">User Management</h2>
-                    <div class="relative">
-                        <input type="text" placeholder="Search users..." class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
-                    </div>
+    <div id="adminPanel" class="hidden min-h-screen">
+        <div class="flex">
+            <!-- Sidebar -->
+            <div class="admin-sidebar text-white w-64 min-h-screen p-4">
+                <div class="flex items-center space-x-3 mb-8">
+                    <i class="fas fa-shield-alt text-2xl text-yellow-300"></i>
+                    <h1 class="text-xl font-bold">FlixSocial Admin</h1>
                 </div>
                 
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="text-left py-3 px-4">User</th>
-                                <th class="text-left py-3 px-4">Email</th>
-                                <th class="text-left py-3 px-4">Joined</th>
-                                <th class="text-left py-3 px-4">Videos</th>
-                                <th class="text-left py-3 px-4">Status</th>
-                                <th class="text-left py-3 px-4">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTable">
-                            <!-- Users will be loaded here -->
-                        </tbody>
-                    </table>
-                </div>
+                <nav class="space-y-2">
+                    <a href="admin.html" class="sidebar-item flex items-center p-3 rounded-lg bg-blue-600">
+                        <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
+                    </a>
+                    <a href="admin-users.html" class="sidebar-item flex items-center p-3 rounded-lg hover:bg-blue-600">
+                        <i class="fas fa-users mr-3"></i> Users
+                    </a>
+                    <a href="admin-videos.html" class="sidebar-item flex items-center p-3 rounded-lg hover:bg-blue-600">
+                        <i class="fas fa-video mr-3"></i> Videos
+                    </a>
+                    <a href="admin-analytics.html" class="sidebar-item flex items-center p-3 rounded-lg hover:bg-blue-600">
+                        <i class="fas fa-chart-bar mr-3"></i> Analytics
+                    </a>
+                    <a href="admin-reports.html" class="sidebar-item flex items-center p-3 rounded-lg hover:bg-blue-600">
+                        <i class="fas fa-flag mr-3"></i> Reports
+                    </a>
+                    <a href="admin-settings.html" class="sidebar-item flex items-center p-3 rounded-lg hover:bg-blue-600">
+                        <i class="fas fa-cog mr-3"></i> Settings
+                    </a>
+                </nav>
             </div>
 
-            <!-- Videos Tab -->
-            <div id="videosContent" class="bg-white rounded-xl shadow-lg p-6 hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold">Video Management</h2>
-                    <div class="flex space-x-3">
-                        <div class="relative">
-                            <input type="text" placeholder="Search videos..." class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+            <!-- Main Content -->
+            <div class="flex-1">
+                <!-- Header -->
+                <header class="bg-white shadow-sm border-b">
+                    <div class="flex justify-between items-center p-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800">Admin Dashboard</h2>
+                            <p class="text-gray-600 text-sm">Welcome back, <span id="adminWelcome">Admin</span></p>
                         </div>
-                        <select class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option>All Categories</option>
-                            <option>Technology</option>
-                            <option>Entertainment</option>
-                            <option>Education</option>
-                            <option>Gaming</option>
-                        </select>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-sm text-gray-600" id="currentTime"></span>
+                            <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="text-left py-3 px-4">Video</th>
-                                <th class="text-left py-3 px-4">Uploader</th>
-                                <th class="text-left py-3 px-4">Views</th>
-                                <th class="text-left py-3 px-4">Likes</th>
-                                <th class="text-left py-3 px-4">Uploaded</th>
-                                <th class="text-left py-3 px-4">Status</th>
-                                <th class="text-left py-3 px-4">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="videosTable">
-                            <!-- Videos will be loaded here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                </header>
 
-            <!-- Analytics Tab -->
-            <div id="analyticsContent" class="bg-white rounded-xl shadow-lg p-6 hidden">
-                <h2 class="text-xl font-bold mb-6">Platform Analytics</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-gray-50 rounded-lg p-6">
-                        <h3 class="font-bold mb-4">Top Videos</h3>
-                        <div id="topVideosList">
-                            <!-- Top videos will be loaded here -->
+                <!-- Main Content -->
+                <main class="p-6">
+                    <!-- Stats Overview -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                        <div class="stats-card bg-white rounded-xl shadow-lg p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-2xl font-bold text-blue-500 mb-2" id="totalUsers">0</div>
+                                    <div class="text-gray-600">Total Users</div>
+                                </div>
+                                <i class="fas fa-users text-3xl text-blue-200"></i>
+                            </div>
+                            <div class="mt-4 text-sm text-green-500">
+                                <i class="fas fa-arrow-up mr-1"></i> 12% increase
+                            </div>
+                        </div>
+                        
+                        <div class="stats-card bg-white rounded-xl shadow-lg p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-2xl font-bold text-green-500 mb-2" id="totalVideos">0</div>
+                                    <div class="text-gray-600">Total Videos</div>
+                                </div>
+                                <i class="fas fa-video text-3xl text-green-200"></i>
+                            </div>
+                            <div class="mt-4 text-sm text-green-500">
+                                <i class="fas fa-arrow-up mr-1"></i> 8% increase
+                            </div>
+                        </div>
+                        
+                        <div class="stats-card bg-white rounded-xl shadow-lg p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-2xl font-bold text-purple-500 mb-2" id="totalViews">0</div>
+                                    <div class="text-gray-600">Total Views</div>
+                                </div>
+                                <i class="fas fa-eye text-3xl text-purple-200"></i>
+                            </div>
+                            <div class="mt-4 text-sm text-green-500">
+                                <i class="fas fa-arrow-up mr-1"></i> 15% increase
+                            </div>
+                        </div>
+                        
+                        <div class="stats-card bg-white rounded-xl shadow-lg p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-2xl font-bold text-yellow-500 mb-2" id="totalLikes">0</div>
+                                    <div class="text-gray-600">Total Likes</div>
+                                </div>
+                                <i class="fas fa-heart text-3xl text-yellow-200"></i>
+                            </div>
+                            <div class="mt-4 text-sm text-green-500">
+                                <i class="fas fa-arrow-up mr-1"></i> 20% increase
+                            </div>
                         </div>
                     </div>
-                    <div class="bg-gray-50 rounded-lg p-6">
-                        <h3 class="font-bold mb-4">Recent Activity</h3>
-                        <div id="recentActivity">
-                            <!-- Recent activity will be loaded here -->
+
+                    <!-- Recent Activity -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Recent Users -->
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-lg font-bold">Recent Users</h3>
+                                <a href="admin-users.html" class="text-blue-500 text-sm">View All</a>
+                            </div>
+                            <div class="space-y-4" id="recentUsers">
+                                <!-- Users will be loaded here -->
+                            </div>
+                        </div>
+
+                        <!-- Recent Videos -->
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-lg font-bold">Recent Videos</h3>
+                                <a href="admin-videos.html" class="text-blue-500 text-sm">View All</a>
+                            </div>
+                            <div class="space-y-4" id="recentVideos">
+                                <!-- Videos will be loaded here -->
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <!-- System Status -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 mt-6">
+                        <h3 class="text-lg font-bold mb-6">System Status</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                                <div>
+                                    <div class="font-semibold">Database</div>
+                                    <div class="text-sm text-gray-600">Operational</div>
+                                </div>
+                                <i class="fas fa-database text-green-500 text-xl"></i>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                                <div>
+                                    <div class="font-semibold">Storage</div>
+                                    <div class="text-sm text-gray-600">2.3GB / 10GB</div>
+                                </div>
+                                <i class="fas fa-hdd text-green-500 text-xl"></i>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                                <div>
+                                    <div class="font-semibold">Uptime</div>
+                                    <div class="text-sm text-gray-600">99.9%</div>
+                                </div>
+                                <i class="fas fa-server text-green-500 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </main>
             </div>
-        </main>
+        </div>
     </div>
 
     <script>
-        // Firebase Configuration
+        // Firebase Configuration for Admin Panel
         const firebaseConfig = {
-            apiKey: "AIzaSyA8CjkoY0ygW4lhpTn_-BKOI9DjHqqFXBs",
-            authDomain: "heroflix-d64ac.firebaseapp.com",
-            databaseURL: "https://heroflix-d64ac-default-rtdb.firebaseio.com",
-            projectId: "heroflix-d64ac",
-            storageBucket: "heroflix-d64ac.firebasestorage.app",
-            messagingSenderId: "451233952566",
-            appId: "1:451233952566:web:1ecd9f7066d5e7cab77997"
+            apiKey: "AIzaSyBFLVfCrvZ9XZMkTB3MtRY47V8BpB_vngA",
+            authDomain: "flixsocial-admin-panel.firebaseapp.com",
+            databaseURL: "https://flixsocial-admin-panel-default-rtdb.firebaseio.com",
+            projectId: "flixsocial-admin-panel",
+            storageBucket: "flixsocial-admin-panel.firebasestorage.app",
+            messagingSenderId: "425534640340",
+            appId: "1:425534640340:web:deecf577df980c13c32b41"
         };
 
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
         const database = firebase.database();
 
         // Admin credentials
@@ -208,14 +236,14 @@
         const loginError = document.getElementById('loginError');
         const logoutBtn = document.getElementById('logoutBtn');
         const adminWelcome = document.getElementById('adminWelcome');
+        const currentTime = document.getElementById('currentTime');
 
-        // Tab elements
-        const usersTab = document.getElementById('usersTab');
-        const videosTab = document.getElementById('videosTab');
-        const analyticsTab = document.getElementById('analyticsTab');
-        const usersContent = document.getElementById('usersContent');
-        const videosContent = document.getElementById('videosContent');
-        const analyticsContent = document.getElementById('analyticsContent');
+        // Update current time
+        function updateTime() {
+            currentTime.textContent = new Date().toLocaleString();
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
 
         // Check if already logged in
         if (localStorage.getItem('adminLoggedIn') === 'true') {
@@ -234,8 +262,25 @@
                 localStorage.setItem('adminLoggedIn', 'true');
                 loginModal.classList.add('hidden');
                 adminPanel.classList.remove('hidden');
-                adminWelcome.textContent = `Welcome, ${email}`;
+                adminWelcome.textContent = email;
                 loadAdminData();
+                
+                // Add admin to database if not exists
+                const adminRef = database.ref('admins/' + btoa(email));
+                adminRef.once('value').then((snapshot) => {
+                    if (!snapshot.exists()) {
+                        adminRef.set({
+                            email: email,
+                            role: 'super_admin',
+                            createdAt: Date.now(),
+                            lastLogin: Date.now()
+                        });
+                    } else {
+                        adminRef.update({
+                            lastLogin: Date.now()
+                        });
+                    }
+                });
             } else {
                 loginError.textContent = 'Invalid email or password';
                 loginError.classList.remove('hidden');
@@ -252,282 +297,111 @@
             loginError.classList.add('hidden');
         });
 
-        // Tab switching
-        usersTab.addEventListener('click', () => switchTab('users'));
-        videosTab.addEventListener('click', () => switchTab('videos'));
-        analyticsTab.addEventListener('click', () => switchTab('analytics'));
-
-        function switchTab(tab) {
-            // Reset all tabs
-            usersTab.classList.remove('border-b-2', 'border-blue-500', 'text-blue-500');
-            videosTab.classList.remove('border-b-2', 'border-blue-500', 'text-blue-500');
-            analyticsTab.classList.remove('border-b-2', 'border-blue-500', 'text-blue-500');
-            
-            usersTab.classList.add('text-gray-500');
-            videosTab.classList.add('text-gray-500');
-            analyticsTab.classList.add('text-gray-500');
-
-            // Hide all content
-            usersContent.classList.add('hidden');
-            videosContent.classList.add('hidden');
-            analyticsContent.classList.add('hidden');
-
-            // Activate selected tab
-            if (tab === 'users') {
-                usersTab.classList.add('border-b-2', 'border-blue-500', 'text-blue-500');
-                usersTab.classList.remove('text-gray-500');
-                usersContent.classList.remove('hidden');
-                loadUsers();
-            } else if (tab === 'videos') {
-                videosTab.classList.add('border-b-2', 'border-blue-500', 'text-blue-500');
-                videosTab.classList.remove('text-gray-500');
-                videosContent.classList.remove('hidden');
-                loadVideos();
-            } else if (tab === 'analytics') {
-                analyticsTab.classList.add('border-b-2', 'border-blue-500', 'text-blue-500');
-                analyticsTab.classList.remove('text-gray-500');
-                analyticsContent.classList.remove('hidden');
-                loadAnalytics();
-            }
-        }
-
         // Load admin data
-        async function loadAdminData() {
-            try {
-                // Load users
-                const usersRef = database.ref('users');
-                usersRef.on('value', (snapshot) => {
-                    const users = snapshot.val();
-                    const userCount = users ? Object.keys(users).length : 0;
-                    document.getElementById('totalUsers').textContent = userCount;
-                });
-
-                // Load videos
-                const videosRef = database.ref('videos');
-                videosRef.on('value', (snapshot) => {
-                    const videos = snapshot.val();
-                    const videoCount = videos ? Object.keys(videos).length : 0;
-                    let totalViews = 0;
-                    let totalLikes = 0;
-
-                    if (videos) {
-                        Object.values(videos).forEach(video => {
-                            totalViews += video.views || 0;
-                            totalLikes += video.likes || 0;
-                        });
-                    }
-
-                    document.getElementById('totalVideos').textContent = videoCount;
-                    document.getElementById('totalViews').textContent = totalViews.toLocaleString();
-                    document.getElementById('totalLikes').textContent = totalLikes.toLocaleString();
-                });
-
-            } catch (error) {
-                console.error('Error loading admin data:', error);
-            }
-        }
-
-        // Load users for management
-        async function loadUsers() {
-            try {
-                const usersRef = database.ref('users');
-                const snapshot = await usersRef.once('value');
+        function loadAdminData() {
+            // Load users count
+            database.ref('users').on('value', (snapshot) => {
                 const users = snapshot.val();
-                const usersTable = document.getElementById('usersTable');
+                const userCount = users ? Object.keys(users).length : 0;
+                document.getElementById('totalUsers').textContent = userCount.toLocaleString();
+                loadRecentUsers(users);
+            });
 
-                usersTable.innerHTML = '';
-
-                if (!users) {
-                    usersTable.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-gray-500">No users found</td></tr>';
-                    return;
-                }
-
-                Object.entries(users).forEach(([userId, user]) => {
-                    const row = document.createElement('tr');
-                    row.className = 'border-b border-gray-200 hover:bg-gray-50';
-                    row.innerHTML = `
-                        <td class="py-3 px-4">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm">
-                                    ${user.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                                </div>
-                                <div>
-                                    <div class="font-medium">${user.name || 'Unknown User'}</div>
-                                    <div class="text-gray-500 text-sm">@${user.username || 'user'}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="py-3 px-4">${user.email || 'No email'}</td>
-                        <td class="py-3 px-4">${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Unknown'}</td>
-                        <td class="py-3 px-4">${user.videoCount || 0}</td>
-                        <td class="py-3 px-4">
-                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">Active</span>
-                        </td>
-                        <td class="py-3 px-4">
-                            <div class="flex space-x-2">
-                                <button onclick="editUser('${userId}')" class="text-blue-500 hover:text-blue-700">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deleteUser('${userId}')" class="text-red-500 hover:text-red-700">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    `;
-                    usersTable.appendChild(row);
-                });
-
-            } catch (error) {
-                console.error('Error loading users:', error);
-            }
-        }
-
-        // Load videos for management
-        async function loadVideos() {
-            try {
-                const videosRef = database.ref('videos');
-                const snapshot = await videosRef.once('value');
+            // Load videos count and data
+            database.ref('videos').on('value', (snapshot) => {
                 const videos = snapshot.val();
-                const videosTable = document.getElementById('videosTable');
+                const videoCount = videos ? Object.keys(videos).length : 0;
+                let totalViews = 0;
+                let totalLikes = 0;
 
-                videosTable.innerHTML = '';
-
-                if (!videos) {
-                    videosTable.innerHTML = '<tr><td colspan="7" class="py-4 text-center text-gray-500">No videos found</td></tr>';
-                    return;
+                if (videos) {
+                    Object.values(videos).forEach(video => {
+                        totalViews += video.views || 0;
+                        totalLikes += video.likes || 0;
+                    });
                 }
 
-                Object.entries(videos).forEach(([videoId, video]) => {
-                    const row = document.createElement('tr');
-                    row.className = 'border-b border-gray-200 hover:bg-gray-50';
-                    row.innerHTML = `
-                        <td class="py-3 px-4">
-                            <div class="flex items-center space-x-3">
-                                <img src="${video.thumbnail || 'https://placehold.co/60x40/667eea/ffffff?text=Video'}" 
-                                     alt="Thumbnail" class="w-15 h-10 object-cover rounded">
-                                <div class="max-w-xs">
-                                    <div class="font-medium truncate">${video.title || 'Untitled Video'}</div>
-                                    <div class="text-gray-500 text-sm truncate">${video.description || 'No description'}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="py-3 px-4">${video.uploadedByName || 'Unknown User'}</td>
-                        <td class="py-3 px-4">${video.views || 0}</td>
-                        <td class="py-3 px-4">${video.likes || 0}</td>
-                        <td class="py-3 px-4">${video.uploadedAt ? new Date(video.uploadedAt).toLocaleDateString() : 'Unknown'}</td>
-                        <td class="py-3 px-4">
-                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">Approved</span>
-                        </td>
-                        <td class="py-3 px-4">
-                            <div class="flex space-x-2">
-                                <button onclick="editVideo('${videoId}')" class="text-blue-500 hover:text-blue-700">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deleteVideo('${videoId}')" class="text-red-500 hover:text-red-700">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                                <button onclick="viewVideo('${videoId}')" class="text-green-500 hover:text-green-700">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                        </td>
-                    `;
-                    videosTable.appendChild(row);
-                });
+                document.getElementById('totalVideos').textContent = videoCount.toLocaleString();
+                document.getElementById('totalViews').textContent = totalViews.toLocaleString();
+                document.getElementById('totalLikes').textContent = totalLikes.toLocaleString();
+                loadRecentVideos(videos);
+            });
+        }
 
-            } catch (error) {
-                console.error('Error loading videos:', error);
+        // Load recent users
+        function loadRecentUsers(users) {
+            const recentUsers = document.getElementById('recentUsers');
+            
+            if (!users) {
+                recentUsers.innerHTML = '<p class="text-gray-500 text-center py-4">No users found</p>';
+                return;
             }
+
+            recentUsers.innerHTML = '';
+            const userArray = Object.entries(users).slice(0, 5);
+            
+            userArray.forEach(([userId, user]) => {
+                const userElement = document.createElement('div');
+                userElement.className = 'flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg';
+                userElement.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                            ${user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                        </div>
+                        <div>
+                            <div class="font-medium">${user.name || 'Unknown User'}</div>
+                            <div class="text-sm text-gray-500">${user.email || 'No email'}</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        ${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Unknown'}
+                    </div>
+                `;
+                recentUsers.appendChild(userElement);
+            });
         }
 
-        // Load analytics data
-        async function loadAnalytics() {
-            // This would typically load charts and detailed analytics
-            document.getElementById('topVideosList').innerHTML = `
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
-                        <div class="font-medium">React Basics Tutorial</div>
-                        <div class="text-blue-500 font-bold">12.5K views</div>
-                    </div>
-                    <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
-                        <div class="font-medium">Cooking Masterclass</div>
-                        <div class="text-blue-500 font-bold">8.7K views</div>
-                    </div>
-                    <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
-                        <div class="font-medium">Gaming Highlights</div>
-                        <div class="text-blue-500 font-bold">6.3K views</div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('recentActivity').innerHTML = `
-                <div class="space-y-3">
-                    <div class="p-3 bg-white rounded-lg shadow-sm">
-                        <div class="font-medium">New user registered</div>
-                        <div class="text-gray-500 text-sm">2 minutes ago</div>
-                    </div>
-                    <div class="p-3 bg-white rounded-lg shadow-sm">
-                        <div class="font-medium">Video uploaded</div>
-                        <div class="text-gray-500 text-sm">15 minutes ago</div>
-                    </div>
-                    <div class="p-3 bg-white rounded-lg shadow-sm">
-                        <div class="font-medium">User reported content</div>
-                        <div class="text-gray-500 text-sm">1 hour ago</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Admin functions
-        window.editUser = function(userId) {
-            alert(`Edit user: ${userId}`);
-            // Implement user editing functionality
-        }
-
-        window.deleteUser = function(userId) {
-            if (confirm('Are you sure you want to delete this user?')) {
-                database.ref('users/' + userId).remove()
-                    .then(() => {
-                        alert('User deleted successfully');
-                        loadUsers();
-                    })
-                    .catch(error => {
-                        alert('Error deleting user: ' + error.message);
-                    });
+        // Load recent videos
+        function loadRecentVideos(videos) {
+            const recentVideos = document.getElementById('recentVideos');
+            
+            if (!videos) {
+                recentVideos.innerHTML = '<p class="text-gray-500 text-center py-4">No videos found</p>';
+                return;
             }
+
+            recentVideos.innerHTML = '';
+            const videoArray = Object.entries(videos).slice(0, 5);
+            
+            videoArray.forEach(([videoId, video]) => {
+                const videoElement = document.createElement('div');
+                videoElement.className = 'flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg';
+                videoElement.innerHTML = `
+                    <img src="${video.thumbnail || 'https://placehold.co/60x40/667eea/ffffff?text=Video'}" 
+                         alt="Thumbnail" class="w-16 h-12 object-cover rounded">
+                    <div class="flex-1">
+                        <div class="font-medium truncate">${video.title || 'Untitled Video'}</div>
+                        <div class="text-sm text-gray-500">${video.views || 0} views • ${video.likes || 0} likes</div>
+                    </div>
+                    <button onclick="viewVideo('${videoId}')" class="text-blue-500 hover:text-blue-700">
+                        <i class="fas fa-external-link-alt"></i>
+                    </button>
+                `;
+                recentVideos.appendChild(videoElement);
+            });
         }
 
-        window.editVideo = function(videoId) {
-            const newTitle = prompt('Enter new title:');
-            if (newTitle) {
-                database.ref('videos/' + videoId).update({
-                    title: newTitle
-                }).then(() => {
-                    alert('Video title updated successfully');
-                    loadVideos();
-                });
-            }
-        }
-
-        window.deleteVideo = function(videoId) {
-            if (confirm('Are you sure you want to delete this video?')) {
-                database.ref('videos/' + videoId).remove()
-                    .then(() => {
-                        alert('Video deleted successfully');
-                        loadVideos();
-                    })
-                    .catch(error => {
-                        alert('Error deleting video: ' + error.message);
-                    });
-            }
-        }
-
+        // Global admin functions
         window.viewVideo = function(videoId) {
             window.open(`video-player.html?id=${videoId}`, '_blank');
         }
 
-        // Initialize with users tab
-        switchTab('users');
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('adminLoggedIn') === 'true') {
+                loadAdminData();
+            }
+        });
     </script>
 </body>
 </html>
