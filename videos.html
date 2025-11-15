@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videos - FlixSocial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        .nav-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .video-card { transition: all 0.3s ease; }
+        .video-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="nav-gradient text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-play-circle text-2xl mr-2 text-yellow-300"></i>
+                    <h1 class="text-xl font-bold">FlixSocial</h1>
+                </div>
+                <nav class="flex space-x-6">
+                    <a href="index.html" class="font-medium hover:text-yellow-300 transition">Home</a>
+                    <a href="videos.html" class="font-medium border-b-2 border-yellow-300">Videos</a>
+                    <a href="profile.html" class="font-medium hover:text-yellow-300 transition">Profile</a>
+                    <a href="messages.html" class="font-medium hover:text-yellow-300 transition">Messages</a>
+                    <a href="notifications.html" class="font-medium hover:text-yellow-300 transition">Notifications</a>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search videos..." class="px-4 py-2 rounded-full text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+                    </div>
+                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full text-sm">
+                        Upload
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 mt-4">
+        <!-- Video Categories -->
+        <div class="flex space-x-4 mb-6 overflow-x-auto pb-2">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-full whitespace-nowrap">All Videos</button>
+            <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full whitespace-nowrap hover:bg-gray-300">Trending</button>
+            <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full whitespace-nowrap hover:bg-gray-300">Music</button>
+            <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full whitespace-nowrap hover:bg-gray-300">Gaming</button>
+        </div>
+
+        <!-- Videos Grid -->
+        <div id="videosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Videos will be loaded dynamically -->
+            <div class="text-center py-10 col-span-full">
+                <i class="fas fa-spinner fa-spin text-4xl text-blue-500 mb-4"></i>
+                <p class="text-xl text-gray-600">Loading videos...</p>
+            </div>
+        </div>
+
+        <!-- No Videos Found -->
+        <div id="noVideos" class="text-center py-20 hidden">
+            <i class="fas fa-video-slash text-4xl text-gray-400 mb-4"></i>
+            <h2 class="text-2xl font-bold text-gray-600 mb-2">No Videos Found</h2>
+            <p class="text-gray-500 mb-6">There are no videos available at the moment.</p>
+            <button class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg">
+                Upload First Video
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA8CjkoY0ygW4lhpTn_-BKOI9DjHqqFXBs",
+            authDomain: "heroflix-d64ac.firebaseapp.com",
+            databaseURL: "https://heroflix-d64ac-default-rtdb.firebaseio.com",
+            projectId: "heroflix-d64ac",
+            storageBucket: "heroflix-d64ac.firebasestorage.app",
+            messagingSenderId: "451233952566",
+            appId: "1:451233952566:web:1ecd9f7066d5e7cab77997"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        async function loadVideos() {
+            try {
+                const videosRef = database.ref('videos');
+                const snapshot = await videosRef.once('value');
+                const videos = snapshot.val();
+                const videosGrid = document.getElementById('videosGrid');
+                const noVideos = document.getElementById('noVideos');
+
+                videosGrid.innerHTML = '';
+
+                if (!videos) {
+                    noVideos.classList.remove('hidden');
+                    return;
+                }
+
+                noVideos.classList.add('hidden');
+
+                Object.entries(videos).forEach(([videoId, video]) => {
+                    const videoCard = document.createElement('div');
+                    videoCard.className = 'video-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer';
+                    videoCard.onclick = () => {
+                        window.location.href = `video-player.html?id=${videoId}`;
+                    };
+                    
+                    videoCard.innerHTML = `
+                        <div class="relative">
+                            <img src="${video.thumbnail || 'https://placehold.co/400x225/667eea/ffffff?text=Video'}" 
+                                 alt="${video.title || 'Video'}" 
+                                 class="w-full h-48 object-cover">
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                ${video.duration || '0:00'}
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-lg mb-2 line-clamp-2">${video.title || 'Untitled Video'}</h3>
+                            <p class="text-gray-600 text-sm mb-2">${video.uploadedByName || 'Unknown User'} • ${video.views || 0} views</p>
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <span>${video.uploadedAt ? new Date(video.uploadedAt).toLocaleDateString() : 'Unknown date'}</span>
+                                <span class="mx-2">•</span>
+                                <span><i class="fas fa-thumbs-up mr-1"></i> ${video.likes || 0}</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    videosGrid.appendChild(videoCard);
+                });
+
+            } catch (error) {
+                console.error('Error loading videos:', error);
+                document.getElementById('videosGrid').innerHTML = `
+                    <div class="text-center py-10 col-span-full">
+                        <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+                        <h2 class="text-xl font-bold text-red-600 mb-2">Error Loading Videos</h2>
+                        <p class="text-gray-600">Please try again later.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Load videos when page loads
+        document.addEventListener('DOMContentLoaded', loadVideos);
+    </script>
+</body>
+</html>
