@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlixSocial - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        .nav-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .sidebar-item:hover { background-color: #3B82F6; color: white; transform: translateX(5px); }
+        .post-card { transition: all 0.3s ease; }
+        .post-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="nav-gradient text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-play-circle text-2xl mr-2 text-yellow-300"></i>
+                    <h1 class="text-xl font-bold">FlixSocial</h1>
+                </div>
+                <nav class="flex space-x-6">
+                    <a href="index.html" class="font-medium border-b-2 border-yellow-300">Home</a>
+                    <a href="videos.html" class="font-medium hover:text-yellow-300 transition">Videos</a>
+                    <a href="profile.html" class="font-medium hover:text-yellow-300 transition">Profile</a>
+                    <a href="messages.html" class="font-medium hover:text-yellow-300 transition">Messages</a>
+                    <a href="notifications.html" class="font-medium hover:text-yellow-300 transition">Notifications</a>
+                    <a href="admin.html" class="font-medium hover:text-red-300 transition">Admin</a>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search..." class="px-4 py-2 rounded-full text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+                    </div>
+                    <button id="authBtn" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full text-sm">
+                        Sign In
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 mt-4">
+        <div class="flex gap-6">
+            <!-- Left Sidebar -->
+            <div class="w-1/4 hidden lg:block">
+                <div class="bg-white rounded-xl shadow-lg p-4 mb-6">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">JS</div>
+                        <div>
+                            <h3 class="font-bold">John Smith</h3>
+                            <p class="text-gray-500 text-sm">@johnsmith</p>
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <a href="profile.html" class="sidebar-item flex items-center p-2 rounded-lg text-gray-700">
+                            <i class="fas fa-user mr-3"></i> My Profile
+                        </a>
+                        <a href="videos.html" class="sidebar-item flex items-center p-2 rounded-lg text-gray-700">
+                            <i class="fas fa-video mr-3"></i> My Videos
+                        </a>
+                        <a href="friends.html" class="sidebar-item flex items-center p-2 rounded-lg text-gray-700">
+                            <i class="fas fa-users mr-3"></i> Friends
+                        </a>
+                        <a href="groups.html" class="sidebar-item flex items-center p-2 rounded-lg text-gray-700">
+                            <i class="fas fa-user-friends mr-3"></i> Groups
+                        </a>
+                        <a href="events.html" class="sidebar-item flex items-center p-2 rounded-lg text-gray-700">
+                            <i class="fas fa-calendar mr-3"></i> Events
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Feed -->
+            <div class="lg:w-2/4 w-full">
+                <!-- Create Post -->
+                <div class="bg-white rounded-xl shadow-lg p-4 mb-6 post-card">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">JS</div>
+                        <input type="text" placeholder="What's on your mind, John?" class="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="flex justify-between border-t pt-4">
+                        <button class="flex items-center text-gray-600 hover:text-blue-500 transition">
+                            <i class="fas fa-video mr-2 text-red-500"></i> Live Video
+                        </button>
+                        <button class="flex items-center text-gray-600 hover:text-green-500 transition">
+                            <i class="fas fa-photo-video mr-2 text-green-500"></i> Photo/Video
+                        </button>
+                        <button class="flex items-center text-gray-600 hover:text-yellow-500 transition">
+                            <i class="fas fa-smile mr-2 text-yellow-500"></i> Feeling
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Feed Posts -->
+                <div class="space-y-6">
+                    <!-- Post 1 -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 post-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold">MS</div>
+                                <div>
+                                    <h3 class="font-bold">Maria Sanchez</h3>
+                                    <p class="text-gray-500 text-sm">2 hours ago · <i class="fas fa-globe-americas"></i></p>
+                                </div>
+                            </div>
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                        </div>
+                        
+                        <p class="mb-4">Just finished this amazing documentary about space exploration! The visuals are absolutely breathtaking. 🚀✨</p>
+                        
+                        <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                            <div class="flex space-x-4">
+                                <img src="https://placehold.co/100x80/667eea/ffffff?text=Space" alt="Space documentary" class="rounded-md w-24 h-20 object-cover">
+                                <div>
+                                    <h4 class="font-bold">The Final Frontier: Space Exploration</h4>
+                                    <p class="text-sm text-gray-600 mt-1">A journey through our universe and beyond</p>
+                                    <p class="text-xs text-gray-500 mt-2">documentary.com</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between text-gray-500 border-t pt-4">
+                            <button class="flex items-center space-x-1 hover:text-blue-500">
+                                <i class="far fa-thumbs-up"></i>
+                                <span>245</span>
+                            </button>
+                            <button class="flex items-center space-x-1 hover:text-blue-500">
+                                <i class="far fa-comment"></i>
+                                <span>42</span>
+                            </button>
+                            <button class="flex items-center space-x-1 hover:text-blue-500">
+                                <i class="far fa-share-square"></i>
+                                <span>Share</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="w-1/4 hidden lg:block">
+                <!-- Trending Now -->
+                <div class="bg-white rounded-xl shadow-lg p-4 mb-6">
+                    <h3 class="font-bold text-lg mb-4">Trending Now</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
+                            <div>
+                                <h4 class="font-semibold">Tech Conference 2023</h4>
+                                <p class="text-xs text-gray-500">15K posts</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+        <div class="bg-white rounded-xl p-6 w-96">
+            <h2 class="text-2xl font-bold mb-4">Welcome to FlixSocial</h2>
+            <div class="space-y-4">
+                <input type="email" placeholder="Email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="password" placeholder="Password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md">Sign In</button>
+                <p class="text-center text-sm text-gray-600">Don't have an account? <a href="#" class="text-blue-500">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA8CjkoY0ygW4lhpTn_-BKOI9DjHqqFXBs",
+            authDomain: "heroflix-d64ac.firebaseapp.com",
+            databaseURL: "https://heroflix-d64ac-default-rtdb.firebaseio.com",
+            projectId: "heroflix-d64ac",
+            storageBucket: "heroflix-d64ac.firebasestorage.app",
+            messagingSenderId: "451233952566",
+            appId: "1:451233952566:web:1ecd9f7066d5e7cab77997"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        
+        const authBtn = document.getElementById('authBtn');
+        const authModal = document.getElementById('authModal');
+
+        authBtn.addEventListener('click', () => {
+            authModal.classList.toggle('hidden');
+        });
+
+        // Close modal when clicking outside
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                authModal.classList.add('hidden');
+            }
+        });
+
+        // Page routing simulation
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A' && e.target.href) {
+                e.preventDefault();
+                const url = new URL(e.target.href);
+                if (url.pathname.endsWith('.html')) {
+                    // Simulate page navigation
+                    window.location.href = url.pathname + url.search;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
