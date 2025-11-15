@@ -3,404 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - FlixSocial</title>
+    <title>Edit Profile - FlixSocial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
         .nav-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .sidebar-item:hover { background-color: #3B82F6; color: white; }
-        .stats-card { transition: all 0.3s ease; }
-        .stats-card:hover { transform: translateY(-5px); }
-        .admin-sidebar { background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%); }
+        .profile-cover { height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
     </style>
 </head>
-<body class="bg-gray-100">
-    <!-- Admin Login Modal -->
-    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-        <div class="bg-white rounded-xl p-8 w-96">
-            <div class="text-center mb-6">
-                <i class="fas fa-shield-alt text-4xl text-blue-500 mb-3"></i>
-                <h2 class="text-2xl font-bold">Admin Login</h2>
-                <p class="text-gray-600 mt-2">Access the FlixSocial Admin Panel</p>
-            </div>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                    <input type="email" id="adminEmail" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="admin@flixsocial.com">
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="nav-gradient text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-play-circle text-2xl mr-2 text-yellow-300"></i>
+                    <h1 class="text-xl font-bold">FlixSocial</h1>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                    <input type="password" id="adminPassword" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter password">
+                <nav class="flex space-x-6">
+                    <a href="index.html" class="font-medium hover:text-yellow-300 transition">Home</a>
+                    <a href="profile.html" class="font-medium hover:text-yellow-300 transition">Profile</a>
+                    <a href="profile-edit.html" class="font-medium border-b-2 border-yellow-300">Edit Profile</a>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full text-sm">
+                        Save Changes
+                    </button>
                 </div>
-                <button id="loginBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md font-medium">
-                    Sign In
-                </button>
-                <p id="loginError" class="text-red-500 text-sm text-center mt-2 hidden"></p>
             </div>
         </div>
-    </div>
+    </header>
 
-    <!-- Admin Panel (Hidden until login) -->
-    <div id="adminPanel" class="hidden min-h-screen">
-        <div class="flex">
-            <!-- Sidebar -->
-            <div class="admin-sidebar text-white w-64 min-h-screen p-4">
-                <div class="flex items-center space-x-3 mb-8">
-                    <i class="fas fa-shield-alt text-2xl text-yellow-300"></i>
-                    <h1 class="text-xl font-bold">FlixSocial Admin</h1>
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 mt-4 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- Profile Cover -->
+            <div class="profile-cover relative">
+                <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+                <div class="absolute bottom-4 left-6 text-white">
+                    <h1 class="text-2xl font-bold">Edit Profile</h1>
+                    <p class="opacity-90">Update your personal information and preferences</p>
                 </div>
-                
-                <nav class="space-y-2">
-                    <a href="admin.html" class="sidebar-item flex items-center p-3 rounded-lg bg-blue-600">
-                        <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
-                    </a>
-                    <a href="admin-users.html" class="sidebar-item flex items-center p-3 rounded-lg hover:bg-blue-600">
-                        <i class="fas fa-users mr-3"></i> Users
-                    </a>
-                    <a href="admin-videos.html" class="sidebar-item flex items-center p-3 rounded-lg hover:bg-blue-600">
-                        <i class="fas fa-video mr-3"></i> Videos
-                    </a>
-                    <a href="admin-analytics.html" class="sidebar-item flex items-center p-3 rounded-lg hover:bg-blue-600">
-                        <i class="fas fa-chart-bar mr-3"></i> Analytics
-                    </a>
-                    <a href="admin-reports.html" class="sidebar-item flex items-center p-3 rounded-lg hover:bg-blue-600">
-                        <i class="fas fa-flag mr-3"></i> Reports
-                    </a>
-                    <a href="admin-settings.html" class="sidebar-item flex items-center p-3 rounded-lg hover:bg-blue-600">
-                        <i class="fas fa-cog mr-3"></i> Settings
-                    </a>
-                </nav>
+                <button class="absolute top-4 right-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-md">
+                    <i class="fas fa-camera mr-2"></i>Change Cover
+                </button>
             </div>
 
-            <!-- Main Content -->
-            <div class="flex-1">
-                <!-- Header -->
-                <header class="bg-white shadow-sm border-b">
-                    <div class="flex justify-between items-center p-4">
-                        <div>
-                            <h2 class="text-xl font-bold text-gray-800">Admin Dashboard</h2>
-                            <p class="text-gray-600 text-sm">Welcome back, <span id="adminWelcome">Admin</span></p>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <span class="text-sm text-gray-600" id="currentTime"></span>
-                            <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm">
-                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+            <!-- Profile Form -->
+            <div class="p-6">
+                <form class="space-y-6">
+                    <!-- Profile Picture -->
+                    <div class="flex items-center space-x-6 -mt-20 mb-6">
+                        <div class="relative">
+                            <div class="w-32 h-32 rounded-full bg-blue-500 flex items-center justify-center text-white text-4xl font-bold border-4 border-white shadow-lg">
+                                JS
+                            </div>
+                            <button type="button" class="absolute bottom-2 right-2 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full">
+                                <i class="fas fa-camera text-sm"></i>
                             </button>
                         </div>
-                    </div>
-                </header>
-
-                <!-- Main Content -->
-                <main class="p-6">
-                    <!-- Stats Overview -->
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                        <div class="stats-card bg-white rounded-xl shadow-lg p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <div class="text-2xl font-bold text-blue-500 mb-2" id="totalUsers">0</div>
-                                    <div class="text-gray-600">Total Users</div>
-                                </div>
-                                <i class="fas fa-users text-3xl text-blue-200"></i>
-                            </div>
-                            <div class="mt-4 text-sm text-green-500">
-                                <i class="fas fa-arrow-up mr-1"></i> 12% increase
-                            </div>
-                        </div>
-                        
-                        <div class="stats-card bg-white rounded-xl shadow-lg p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <div class="text-2xl font-bold text-green-500 mb-2" id="totalVideos">0</div>
-                                    <div class="text-gray-600">Total Videos</div>
-                                </div>
-                                <i class="fas fa-video text-3xl text-green-200"></i>
-                            </div>
-                            <div class="mt-4 text-sm text-green-500">
-                                <i class="fas fa-arrow-up mr-1"></i> 8% increase
-                            </div>
-                        </div>
-                        
-                        <div class="stats-card bg-white rounded-xl shadow-lg p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <div class="text-2xl font-bold text-purple-500 mb-2" id="totalViews">0</div>
-                                    <div class="text-gray-600">Total Views</div>
-                                </div>
-                                <i class="fas fa-eye text-3xl text-purple-200"></i>
-                            </div>
-                            <div class="mt-4 text-sm text-green-500">
-                                <i class="fas fa-arrow-up mr-1"></i> 15% increase
-                            </div>
-                        </div>
-                        
-                        <div class="stats-card bg-white rounded-xl shadow-lg p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <div class="text-2xl font-bold text-yellow-500 mb-2" id="totalLikes">0</div>
-                                    <div class="text-gray-600">Total Likes</div>
-                                </div>
-                                <i class="fas fa-heart text-3xl text-yellow-200"></i>
-                            </div>
-                            <div class="mt-4 text-sm text-green-500">
-                                <i class="fas fa-arrow-up mr-1"></i> 20% increase
-                            </div>
+                        <div>
+                            <h2 class="text-xl font-bold">John Smith</h2>
+                            <p class="text-gray-600">@johnsmith</p>
                         </div>
                     </div>
 
-                    <!-- Recent Activity -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Recent Users -->
-                        <div class="bg-white rounded-xl shadow-lg p-6">
-                            <div class="flex justify-between items-center mb-6">
-                                <h3 class="text-lg font-bold">Recent Users</h3>
-                                <a href="admin-users.html" class="text-blue-500 text-sm">View All</a>
-                            </div>
-                            <div class="space-y-4" id="recentUsers">
-                                <!-- Users will be loaded here -->
-                            </div>
-                        </div>
-
-                        <!-- Recent Videos -->
-                        <div class="bg-white rounded-xl shadow-lg p-6">
-                            <div class="flex justify-between items-center mb-6">
-                                <h3 class="text-lg font-bold">Recent Videos</h3>
-                                <a href="admin-videos.html" class="text-blue-500 text-sm">View All</a>
-                            </div>
-                            <div class="space-y-4" id="recentVideos">
-                                <!-- Videos will be loaded here -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- System Status -->
-                    <div class="bg-white rounded-xl shadow-lg p-6 mt-6">
-                        <h3 class="text-lg font-bold mb-6">System Status</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
-                                <div>
-                                    <div class="font-semibold">Database</div>
-                                    <div class="text-sm text-gray-600">Operational</div>
-                                </div>
-                                <i class="fas fa-database text-green-500 text-xl"></i>
-                            </div>
-                            <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
-                                <div>
-                                    <div class="font-semibold">Storage</div>
-                                    <div class="text-sm text-gray-600">2.3GB / 10GB</div>
-                                </div>
-                                <i class="fas fa-hdd text-green-500 text-xl"></i>
-                            </div>
-                            <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
-                                <div>
-                                    <div class="font-semibold">Uptime</div>
-                                    <div class="text-sm text-gray-600">99.9%</div>
-                                </div>
-                                <i class="fas fa-server text-green-500 text-xl"></i>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Firebase Configuration for Admin Panel
-        const firebaseConfig = {
-            apiKey: "AIzaSyBFLVfCrvZ9XZMkTB3MtRY47V8BpB_vngA",
-            authDomain: "flixsocial-admin-panel.firebaseapp.com",
-            databaseURL: "https://flixsocial-admin-panel-default-rtdb.firebaseio.com",
-            projectId: "flixsocial-admin-panel",
-            storageBucket: "flixsocial-admin-panel.firebasestorage.app",
-            messagingSenderId: "425534640340",
-            appId: "1:425534640340:web:deecf577df980c13c32b41"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const database = firebase.database();
-
-        // Admin credentials
-        const ADMIN_EMAIL = "mgpspport@gmail.com";
-        const ADMIN_PASSWORD = "acer4321234@";
-
-        // DOM Elements
-        const loginModal = document.getElementById('loginModal');
-        const adminPanel = document.getElementById('adminPanel');
-        const adminEmail = document.getElementById('adminEmail');
-        const adminPassword = document.getElementById('adminPassword');
-        const loginBtn = document.getElementById('loginBtn');
-        const loginError = document.getElementById('loginError');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const adminWelcome = document.getElementById('adminWelcome');
-        const currentTime = document.getElementById('currentTime');
-
-        // Update current time
-        function updateTime() {
-            currentTime.textContent = new Date().toLocaleString();
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-
-        // Check if already logged in
-        if (localStorage.getItem('adminLoggedIn') === 'true') {
-            loginModal.classList.add('hidden');
-            adminPanel.classList.remove('hidden');
-            loadAdminData();
-        }
-
-        // Login functionality
-        loginBtn.addEventListener('click', () => {
-            const email = adminEmail.value;
-            const password = adminPassword.value;
-
-            if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-                // Successful login
-                localStorage.setItem('adminLoggedIn', 'true');
-                loginModal.classList.add('hidden');
-                adminPanel.classList.remove('hidden');
-                adminWelcome.textContent = email;
-                loadAdminData();
-                
-                // Add admin to database if not exists
-                const adminRef = database.ref('admins/' + btoa(email));
-                adminRef.once('value').then((snapshot) => {
-                    if (!snapshot.exists()) {
-                        adminRef.set({
-                            email: email,
-                            role: 'super_admin',
-                            createdAt: Date.now(),
-                            lastLogin: Date.now()
-                        });
-                    } else {
-                        adminRef.update({
-                            lastLogin: Date.now()
-                        });
-                    }
-                });
-            } else {
-                loginError.textContent = 'Invalid email or password';
-                loginError.classList.remove('hidden');
-            }
-        });
-
-        // Logout functionality
-        logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('adminLoggedIn');
-            adminPanel.classList.add('hidden');
-            loginModal.classList.remove('hidden');
-            adminEmail.value = '';
-            adminPassword.value = '';
-            loginError.classList.add('hidden');
-        });
-
-        // Load admin data
-        function loadAdminData() {
-            // Load users count
-            database.ref('users').on('value', (snapshot) => {
-                const users = snapshot.val();
-                const userCount = users ? Object.keys(users).length : 0;
-                document.getElementById('totalUsers').textContent = userCount.toLocaleString();
-                loadRecentUsers(users);
-            });
-
-            // Load videos count and data
-            database.ref('videos').on('value', (snapshot) => {
-                const videos = snapshot.val();
-                const videoCount = videos ? Object.keys(videos).length : 0;
-                let totalViews = 0;
-                let totalLikes = 0;
-
-                if (videos) {
-                    Object.values(videos).forEach(video => {
-                        totalViews += video.views || 0;
-                        totalLikes += video.likes || 0;
-                    });
-                }
-
-                document.getElementById('totalVideos').textContent = videoCount.toLocaleString();
-                document.getElementById('totalViews').textContent = totalViews.toLocaleString();
-                document.getElementById('totalLikes').textContent = totalLikes.toLocaleString();
-                loadRecentVideos(videos);
-            });
-        }
-
-        // Load recent users
-        function loadRecentUsers(users) {
-            const recentUsers = document.getElementById('recentUsers');
-            
-            if (!users) {
-                recentUsers.innerHTML = '<p class="text-gray-500 text-center py-4">No users found</p>';
-                return;
-            }
-
-            recentUsers.innerHTML = '';
-            const userArray = Object.entries(users).slice(0, 5);
-            
-            userArray.forEach(([userId, user]) => {
-                const userElement = document.createElement('div');
-                userElement.className = 'flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg';
-                userElement.innerHTML = `
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                            ${user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                    <!-- Basic Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                            <input type="text" value="John" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
-                            <div class="font-medium">${user.name || 'Unknown User'}</div>
-                            <div class="text-sm text-gray-500">${user.email || 'No email'}</div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                            <input type="text" value="Smith" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
-                    <div class="text-sm text-gray-500">
-                        ${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Unknown'}
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                            <input type="text" value="johnsmith" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" value="john@example.com" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
                     </div>
-                `;
-                recentUsers.appendChild(userElement);
-            });
-        }
 
-        // Load recent videos
-        function loadRecentVideos(videos) {
-            const recentVideos = document.getElementById('recentVideos');
-            
-            if (!videos) {
-                recentVideos.innerHTML = '<p class="text-gray-500 text-center py-4">No videos found</p>';
-                return;
-            }
-
-            recentVideos.innerHTML = '';
-            const videoArray = Object.entries(videos).slice(0, 5);
-            
-            videoArray.forEach(([videoId, video]) => {
-                const videoElement = document.createElement('div');
-                videoElement.className = 'flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg';
-                videoElement.innerHTML = `
-                    <img src="${video.thumbnail || 'https://placehold.co/60x40/667eea/ffffff?text=Video'}" 
-                         alt="Thumbnail" class="w-16 h-12 object-cover rounded">
-                    <div class="flex-1">
-                        <div class="font-medium truncate">${video.title || 'Untitled Video'}</div>
-                        <div class="text-sm text-gray-500">${video.views || 0} views • ${video.likes || 0} likes</div>
+                    <!-- Bio -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+                        <textarea rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tell people about yourself...">Content creator passionate about technology and education. Sharing knowledge through videos and tutorials.</textarea>
                     </div>
-                    <button onclick="viewVideo('${videoId}')" class="text-blue-500 hover:text-blue-700">
-                        <i class="fas fa-external-link-alt"></i>
-                    </button>
-                `;
-                recentVideos.appendChild(videoElement);
-            });
-        }
 
-        // Global admin functions
-        window.viewVideo = function(videoId) {
-            window.open(`video-player.html?id=${videoId}`, '_blank');
-        }
+                    <!-- Location & Website -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                            <input type="text" value="San Francisco, CA" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Website</label>
+                            <input type="url" value="https://johnsmith.com" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('adminLoggedIn') === 'true') {
-                loadAdminData();
-            }
+                    <!-- Social Links -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Social Links</label>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <i class="fab fa-twitter text-blue-400 w-5"></i>
+                                <input type="text" placeholder="Twitter username" value="@johnsmith" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fab fa-instagram text-pink-500 w-5"></i>
+                                <input type="text" placeholder="Instagram username" value="@johnsmith" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fab fa-linkedin text-blue-600 w-5"></i>
+                                <input type="text" placeholder="LinkedIn profile URL" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Settings -->
+                    <div class="border-t pt-6">
+                        <h3 class="text-lg font-bold mb-4">Privacy Settings</h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                <div>
+                                    <div class="font-medium">Public Profile</div>
+                                    <div class="text-sm text-gray-600">Anyone can see your profile and videos</div>
+                                </div>
+                                <input type="checkbox" checked class="rounded text-blue-500">
+                            </label>
+                            <label class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                <div>
+                                    <div class="font-medium">Email Notifications</div>
+                                    <div class="text-sm text-gray-600">Receive email updates about your account</div>
+                                </div>
+                                <input type="checkbox" checked class="rounded text-blue-500">
+                            </label>
+                            <label class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                <div>
+                                    <div class="font-medium">Data Analytics</div>
+                                    <div class="text-sm text-gray-600">Help improve FlixSocial by sharing usage data</div>
+                                </div>
+                                <input type="checkbox" checked class="rounded text-blue-500">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end space-x-4 pt-6 border-t">
+                        <button type="button" onclick="window.history.back()" class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Profile updated successfully!');
+            window.location.href = 'profile.html';
         });
     </script>
 </body>
